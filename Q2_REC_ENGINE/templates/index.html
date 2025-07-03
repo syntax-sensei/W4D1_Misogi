@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Home - AI Recommendation Engine{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Recommended for You</h2>
+<div class="row">
+    {% for rec in recommendations %}
+    <div class="col-md-3 mb-4">
+        <div class="card product-card">
+            <img src="{{ rec.image_url or url_for('static', filename='default.png') }}" class="card-img-top product-image" alt="{{ rec.product_name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ rec.product_name }}</h5>
+                <p class="card-text">{{ rec.category }}</p>
+                <p class="price">${{ rec.price }}</p>
+                <a href="{{ url_for('product_detail', product_id=rec.product_id) }}" class="btn btn-outline-primary btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<h3 class="mt-5 mb-3">Featured Products</h3>
+<div class="row">
+    {% for product in featured_products %}
+    <div class="col-md-3 mb-4">
+        <div class="card product-card">
+            <img src="{{ product.image_url or url_for('static', filename='default.png') }}" class="card-img-top product-image" alt="{{ product.product_name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.product_name }}</h5>
+                <p class="card-text">{{ product.category }}</p>
+                <p class="price">${{ product.price }}</p>
+                <a href="{{ url_for('product_detail', product_id=product.product_id) }}" class="btn btn-outline-primary btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

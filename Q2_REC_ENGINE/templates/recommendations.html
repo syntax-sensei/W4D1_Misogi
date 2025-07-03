@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Recommendations - AI Recommendation Engine{% endblock %}
+
+{% block content %}
+<h2>AI-Powered Recommendations</h2>
+<div class="recommendation-section">
+    <h4>Hybrid Recommendations</h4>
+    <div class="row">
+        {% for rec in hybrid_recs %}
+        <div class="col-md-3 mb-4">
+            <div class="card product-card">
+                <img src="{{ rec.image_url or url_for('static', filename='default.png') }}" class="card-img-top product-image" alt="{{ rec.product_name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ rec.product_name }}</h5>
+                    <p class="card-text">{{ rec.category }}</p>
+                    <p class="price">${{ rec.price }}</p>
+                    <a href="{{ url_for('product_detail', product_id=rec.product_id) }}" class="btn btn-outline-primary btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="recommendation-section">
+    <h4>Content-Based Recommendations</h4>
+    <div class="row">
+        {% for rec in content_recs %}
+        <div class="col-md-3 mb-4">
+            <div class="card product-card">
+                <img src="{{ rec.image_url or url_for('static', filename='default.png') }}" class="card-img-top product-image" alt="{{ rec.product_name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ rec.product_name }}</h5>
+                    <p class="card-text">{{ rec.category }}</p>
+                    <p class="price">${{ rec.price }}</p>
+                    <a href="{{ url_for('product_detail', product_id=rec.product_id) }}" class="btn btn-outline-primary btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="recommendation-section">
+    <h4>Collaborative Recommendations</h4>
+    <div class="row">
+        {% for rec in collab_recs %}
+        <div class="col-md-3 mb-4">
+            <div class="card product-card">
+                <img src="{{ rec.image_url or url_for('static', filename='default.png') }}" class="card-img-top product-image" alt="{{ rec.product_name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ rec.product_name }}</h5>
+                    <p class="card-text">{{ rec.category }}</p>
+                    <p class="price">${{ rec.price }}</p>
+                    <a href="{{ url_for('product_detail', product_id=rec.product_id) }}" class="btn btn-outline-primary btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="recommendation-section">
+    <h4>Popular Products</h4>
+    <div class="row">
+        {% for rec in popular_recs %}
+        <div class="col-md-3 mb-4">
+            <div class="card product-card">
+                <img src="{{ rec.image_url or url_for('static', filename='default.png') }}" class="card-img-top product-image" alt="{{ rec.product_name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ rec.product_name }}</h5>
+                    <p class="card-text">{{ rec.category }}</p>
+                    <p class="price">${{ rec.price }}</p>
+                    <a href="{{ url_for('product_detail', product_id=rec.product_id) }}" class="btn btn-outline-primary btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Products - AI Recommendation Engine{% endblock %}
+
+{% block content %}
+<h2>Product Catalog</h2>
+<form class="row mb-4" method="get">
+    <div class="col-md-4">
+        <select class="form-select" name="category" onchange="this.form.submit()">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+            <option value="{{ cat }}" {% if request.args.get('category') == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-4">
+        <input type="text" class="form-control" name="search" placeholder="Search products..." value="{{ request.args.get('search', '') }}">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+<div class="row">
+    {% for product in products.items %}
+    <div class="col-md-3 mb-4">
+        <div class="card product-card">
+            <img src="{{ product.image_url or url_for('static', filename='default.png') }}" class="card-img-top product-image" alt="{{ product.product_name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.product_name }}</h5>
+                <p class="card-text">{{ product.category }}</p>
+                <p class="price">${{ product.price }}</p>
+                <a href="{{ url_for('product_detail', product_id=product.product_id) }}" class="btn btn-outline-primary btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<nav>
+    <ul class="pagination">
+        {% if products.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('products', page=products.prev_num, category=request.args.get('category'), search=request.args.get('search')) }}">Previous</a>
+        </li>
+        {% endif %}
+        {% for page_num in products.iter_pages() %}
+        {% if page_num %}
+        <li class="page-item {% if products.page == page_num %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('products', page=page_num, category=request.args.get('category'), search=request.args.get('search')) }}">{{ page_num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% if products.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('products', page=products.next_num, category=request.args.get('category'), search=request.args.get('search')) }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %} 

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.product_name }} - Product Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <img src="{{ product.image_url or url_for('static', filename='default.png') }}" class="img-fluid" alt="{{ product.product_name }}">
+    </div>
+    <div class="col-md-7">
+        <h2>{{ product.product_name }}</h2>
+        <p><strong>Category:</strong> {{ product.category }} / {{ product.subcategory }}</p>
+        <p><strong>Price:</strong> ${{ product.price }}</p>
+        {% if product.is_on_sale %}
+        <p><span class="sale-price">${{ product.sale_price }}</span> <span class="badge bg-danger">On Sale!</span></p>
+        {% endif %}
+        <p><strong>Rating:</strong> <span class="rating">{{ product.rating }}</span></p>
+        <p><strong>Description:</strong> {{ product.description }}</p>
+        <p><strong>Manufacturer:</strong> {{ product.manufacturer }}</p>
+        <p><strong>In Stock:</strong> {{ product.quantity_in_stock }}</p>
+        
+        <!-- Updated like button with correct initial state -->
+        <button class="btn {% if is_liked %}btn-success{% else %}btn-outline-success{% endif %}" id="like-btn">
+            <i class="fa fa-thumbs-up"></i> 
+            {% if is_liked %}Liked{% else %}Like{% endif %}
+        </button>
+        
+        <button class="btn btn-primary" id="purchase-btn">
+            <i class="fa fa-shopping-cart"></i> Purchase
+        </button>
+    </div>
+</div>
+<hr>
+<h4>Similar Products</h4>
+<div class="row">
+    {% for rec in similar_products %}
+    <div class="col-md-3 mb-4">
+        <div class="card product-card">
+            <img src="{{ rec.image_url or url_for('static', filename='default.png') }}" class="card-img-top product-image" alt="{{ rec.product_name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ rec.product_name }}</h5>
+                <p class="card-text">{{ rec.category }}</p>
+                <p class="price">${{ rec.price }}</p>
+                <a href="{{ url_for('product_detail', product_id=rec.product_id) }}" class="btn btn-outline-primary btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$('#like-btn').click(function() {
+    $.post('{{ url_for("like_product", product_id=product.product_id) }}', function(data) {
+        if (data.liked) {
+            $('#like-btn').removeClass('btn-outline-success').addClass('btn-success');
+            $('#like-btn').html('<i class="fa fa-thumbs-up"></i> Liked');
+        } else {
+            $('#like-btn').removeClass('btn-success').addClass('btn-outline-success');
+            $('#like-btn').html('<i class="fa fa-thumbs-up"></i> Like');
+        }
+    });
+});
+
+$('#purchase-btn').click(function() {
+    $.post('{{ url_for("purchase_product", product_id=product.product_id) }}', function(data) {
+        if (data.success) {
+            alert('Purchase recorded!');
+        }
+    });
+});
+</script>
+{% endblock %} 
